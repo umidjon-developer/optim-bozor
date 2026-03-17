@@ -9,7 +9,6 @@ import {
   Grid3X3,
   Heart,
   ShoppingBag,
-  Tag,
   ChevronDown,
   ChevronRight,
   Sparkles,

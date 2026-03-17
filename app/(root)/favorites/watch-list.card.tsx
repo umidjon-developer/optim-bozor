@@ -2,7 +2,6 @@
 
 import { IProduct } from '@/types';
 import { FC, MouseEvent } from 'react';
-import { Button } from '@/components/ui/button';
 import { Heart, Loader2 } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import useAction from '@/hooks/use-action';

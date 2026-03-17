@@ -30,7 +30,7 @@ function HearComponent({ productId }: { productId: string }) {
 			return onError(res.data.failure)
 		}
 		if (res.data.status === 200) {
-			toast.success("Siz mahsulot saralanganlarga qo'shdingiz")
+			toast.success("Siz mahsulot saralanganlarga qo&apos;shdingiz")
 			setIsFavorite(true)
 			const favs = JSON.parse(localStorage.getItem('favorites') || '[]')
 			if (!favs.includes(productId)) {

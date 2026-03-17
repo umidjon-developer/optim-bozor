@@ -2,7 +2,7 @@
 
 import UserBox from "@/components/shared/user-box";
 import { Button } from "@/components/ui/button";
-import { User, Heart, ShoppingBag, LogIn, Search, Bell, Menu, X } from "lucide-react";
+import { User, Heart, ShoppingBag, LogIn, Search, Bell, X } from "lucide-react";
 import Link from "next/link";
 import { FC, useState, useEffect, useRef } from "react";
 import { signOut, useSession } from "next-auth/react";

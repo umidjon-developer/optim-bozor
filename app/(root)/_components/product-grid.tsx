@@ -63,7 +63,7 @@ const ProductGrid = ({ products, title = "Featured Products" }: Props) => {
         initial="hidden"
         animate="visible"
       >
-        {products.map((item, index) => (
+        {products.map((item) => (
           <motion.div key={item._id} variants={itemVariants}>
             <ProductCard product={item} />
           </motion.div>

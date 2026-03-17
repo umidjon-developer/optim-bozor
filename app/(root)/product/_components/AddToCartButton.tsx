@@ -24,7 +24,7 @@ export default function AddToCartButton({ productId, selleronId }: Props) {
 			setIsSuccess(true)
 			toast({
 				title: 'Muvaffaqiyatli',
-				description: "Mahsulot savatga qo'shildi",
+				description: "Mahsulot savatga qo&apos;shildi",
 			})
 			router.refresh()
 			setTimeout(() => setIsSuccess(false), 2000)

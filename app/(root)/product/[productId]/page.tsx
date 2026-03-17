@@ -17,7 +17,6 @@ import {
 	ShieldCheck, 
 	Truck, 
 	RotateCcw,
-	Package,
 	Star
 } from 'lucide-react'
 
@@ -161,7 +160,7 @@ const Page: FC<Props> = async ({ params }: Props) => {
 							<div className='w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center'>
 								<Store className='w-5 h-5 text-white' />
 							</div>
-							<h2 className='font-bold text-xl text-slate-900 dark:text-white'>Sotuvchi ma'lumoti</h2>
+							<h2 className='font-bold text-xl text-slate-900 dark:text-white'>Sotuvchi ma&apos;lumoti</h2>
 						</div>
 						
 						<div className='flex flex-col sm:flex-row sm:items-center gap-6'>

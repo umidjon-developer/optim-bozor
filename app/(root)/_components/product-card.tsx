@@ -214,7 +214,7 @@ const ProductCard: FC<Props> = ({ product }) => {
                       // Refresh the cart page data
                       router.refresh();
                     }
-                  } catch (error) {
+                  } catch {
                     toast({ 
                       description: "Failed to add to cart",
                       variant: "destructive"
