@@ -10,7 +10,7 @@ const Cart = async () => {
 	// Optimized fetching
 	const data = await getCart()
 	const cart = data?.data?.cart?.products || []
-
+	console.log(data)
 	return (
 		<Suspense fallback={<div>Loading cart...</div>}>
 			<CartPage products={cart} />

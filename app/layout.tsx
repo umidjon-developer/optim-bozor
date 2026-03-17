@@ -2,16 +2,17 @@ import { ChildProps } from "@/types";
 import "./globals.css";
 
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { Inter } from "next/font/google";
 import React, { FC } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/components/providers/session.provider";
 import NextTopLoader from "nextjs-toploader";
 import { ToastContainer } from "react-toastify";
 
-const montserrat = Montserrat({
-  weight: ["400", "500", "600", "700", "800", "900"],
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -50,7 +51,7 @@ const RootLayout: FC<ChildProps> = ({ children }) => {
     <Providers>
       <html lang="uz" suppressHydrationWarning>
         <body
-          className={`${montserrat.className} antialiased`}
+          className={`${inter.variable} font-sans antialiased`}
           suppressHydrationWarning
         >
           <link rel="manifest" href="/manifest.json" />

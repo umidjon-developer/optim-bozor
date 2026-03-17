@@ -1,19 +1,35 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Banner data (add alt for accessibility)
 const banners = [
-  { image: "/banner/maktab.png", alt: "Maktab mavzuli chegirmalar" },
-  { image: "/banner/fast-food.png", alt: "Fast food aksiyalari" },
-  { image: "/banner/kiyimlar.png", alt: "Kiyımlar kolleksiyasi" },
+  { 
+    image: "/banner/maktab.png", 
+    alt: "Maktab mavzuli chegirmalar",
+    title: "Back to School",
+    subtitle: "Up to 40% off on school supplies",
+    cta: "Shop Now"
+  },
+  { 
+    image: "/banner/fast-food.png", 
+    alt: "Fast food aksiyalari",
+    title: "Food Festival",
+    subtitle: "Delicious deals await you",
+    cta: "Explore"
+  },
+  { 
+    image: "/banner/kiyimlar.png", 
+    alt: "Kiyımlar kolleksiyasi",
+    title: "Fashion Week",
+    subtitle: "New collection available now",
+    cta: "Discover"
+  },
 ];
 
-// Motion variants
 const variants = {
   enter: (direction: number) => ({
     x: direction > 0 ? 1000 : -1000,
@@ -40,12 +56,11 @@ export default function Banner() {
     setCurrentSlide((index + banners.length) % banners.length);
   };
 
-  // Stable autoplay (doesn't reset every slide)
   useEffect(() => {
     const id = setInterval(() => {
       setDirection(1);
       setCurrentSlide((prev) => (prev + 1) % banners.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(id);
   }, []);
 
@@ -53,9 +68,9 @@ export default function Banner() {
 
   return (
     <div
-      className="relative w-full mb-2 overflow-hidden rounded-2xl sm:rounded-3xl shadow-sm aspect-[16/9] sm:aspect-[21/9]"
+      className="relative w-full overflow-hidden rounded-2xl sm:rounded-3xl shadow-premium aspect-[16/9] sm:aspect-[21/9]"
       aria-roledescription="carousel"
-      aria-label="Reklama bannerlari"
+      aria-label="Featured promotions"
     >
       <AnimatePresence initial={false} custom={direction} mode="wait">
         <motion.div
@@ -76,23 +91,65 @@ export default function Banner() {
             className="object-cover"
             priority
           />
-          {/* Gentle gradient so any overlaid text (if added) remains readable */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-black/0 to-transparent pointer-events-none" />
+          
+          {/* Premium gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent pointer-events-none" />
+          
+          {/* Decorative gradient orbs */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+          
+          {/* Content overlay */}
+          <div className="absolute inset-0 flex flex-col justify-center px-8 sm:px-12 lg:px-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="max-w-lg"
+            >
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 mb-4">
+                <Sparkles className="w-4 h-4 text-yellow-300" />
+                <span className="text-xs font-medium text-white">Featured</span>
+              </div>
+              
+              {/* Title */}
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 tracking-tight">
+                {banner.title}
+              </h2>
+              
+              {/* Subtitle */}
+              <p className="text-base sm:text-lg text-white/80 mb-6">
+                {banner.subtitle}
+              </p>
+              
+              {/* CTA Button */}
+              <Button
+                variant="gradient"
+                size="lg"
+                className="rounded-xl font-semibold"
+              >
+                {banner.cta}
+              </Button>
+            </motion.div>
+          </div>
         </motion.div>
       </AnimatePresence>
 
       {/* Dots */}
-      <div className="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+      <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
         {banners.map((_, index) => (
           <button
             key={index}
             onClick={() => goTo(index)}
-            aria-label={`Slide ${index + 1} ga o'tish`}
-            className="relative w-6 h-6 flex items-center justify-center rounded-full"
+            aria-label={`Go to slide ${index + 1}`}
+            className="relative w-8 h-8 flex items-center justify-center rounded-full group"
           >
             <span
-              className={`w-2.5 h-2.5 rounded-full ring-1 ring-white/60 transition-all ${
-                index === currentSlide ? "bg-white scale-110" : "bg-white/50"
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentSlide 
+                  ? "w-6 bg-white shadow-lg shadow-purple-500/25" 
+                  : "bg-white/50 group-hover:bg-white/70"
               }`}
             />
           </button>
@@ -100,25 +157,37 @@ export default function Banner() {
       </div>
 
       {/* Arrows */}
-      <Button
-        variant="outline"
-        size="icon"
-        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/85 hover:bg-white rounded-full h-9 w-9 sm:h-10 sm:w-10 z-20 shadow ring-1 ring-black/5"
-        onClick={() => goTo(currentSlide - 1)}
-        aria-label="Oldingi slayd"
+      <motion.div
+        className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-20"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
       >
-        <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
-      </Button>
+        <Button
+          variant="premium"
+          size="icon"
+          className="h-10 w-10 sm:h-12 sm:w-12 rounded-full backdrop-blur-sm bg-white/90 dark:bg-gray-900/90"
+          onClick={() => goTo(currentSlide - 1)}
+          aria-label="Previous slide"
+        >
+          <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+        </Button>
+      </motion.div>
 
-      <Button
-        variant="outline"
-        size="icon"
-        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/85 hover:bg-white rounded-full h-9 w-9 sm:h-10 sm:w-10 z-20 shadow ring-1 ring-black/5"
-        onClick={() => goTo(currentSlide + 1)}
-        aria-label="Keyingi slayd"
+      <motion.div
+        className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-20"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
       >
-        <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
-      </Button>
+        <Button
+          variant="premium"
+          size="icon"
+          className="h-10 w-10 sm:h-12 sm:w-12 rounded-full backdrop-blur-sm bg-white/90 dark:bg-gray-900/90"
+          onClick={() => goTo(currentSlide + 1)}
+          aria-label="Next slide"
+        >
+          <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+        </Button>
+      </motion.div>
     </div>
   );
 }

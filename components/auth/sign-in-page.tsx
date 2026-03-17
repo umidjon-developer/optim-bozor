@@ -14,13 +14,14 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { loginSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader } from "lucide-react";
+import { Loader, Mail, Lock, ArrowRight } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import GoogleButton from "./google-button";
+import { motion } from "framer-motion";
 
 const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -51,153 +52,125 @@ const SignInPage = () => {
   }
 
   return (
-    <div className="w-full max-w-md">
-      {/* Header Section */}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      {/* Header */}
       <div className="text-center mb-8">
-        <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-          <svg
-            className="w-8 h-8 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-            />
-          </svg>
-        </div>
-        <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-2">
-          Xush kelibsiz
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          Welcome back
         </h1>
-        <p className="text-sm text-gray-600">
-          Optim bozor hisobingizga kirish uchun ma&apos;lumotlaringizni kiriting
+        <p className="text-gray-500 dark:text-gray-400">
+          Sign in to your account to continue
         </p>
       </div>
 
       {/* Form Card */}
-      <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-6 sm:p-8">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-premium border border-gray-100 dark:border-gray-700 p-8">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700">
-                    Email manzil
+                <FormItem>
+                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Email
                   </Label>
                   <FormControl>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg
-                          className="h-5 w-5 text-gray-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-                          />
-                        </svg>
-                      </div>
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <Input
-                        placeholder="example@gmail.com"
+                        placeholder="you@example.com"
                         disabled={isLoading}
-                        className="pl-10 h-12 bg-white/50 border-gray-200 focus:border-purple-500 focus:ring-purple-500/20 rounded-xl transition-all duration-200"
+                        className="pl-10 h-12 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-500 rounded-xl transition-all"
                         {...field}
                       />
                     </div>
                   </FormControl>
-                  <FormMessage className="text-xs text-red-500" />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
+            
             <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700">
-                    Parol
+                <FormItem>
+                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Password
                   </Label>
                   <FormControl>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg
-                          className="h-5 w-5 text-gray-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                          />
-                        </svg>
-                      </div>
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <Input
-                        placeholder="••••••••"
+                        placeholder="Enter your password"
                         type="password"
                         disabled={isLoading}
-                        className="pl-10 h-12 bg-white/50 border-gray-200 focus:border-purple-500 focus:ring-purple-500/20 rounded-xl transition-all duration-200"
+                        className="pl-10 h-12 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-500 rounded-xl transition-all"
                         {...field}
                       />
                     </div>
                   </FormControl>
-                  <FormMessage className="text-xs text-red-500" />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
-            >
-              {isLoading ? (
-                <div className="flex items-center justify-center">
-                  <Loader className="mr-2 h-5 w-5 animate-spin" />
-                  Kirish...
-                </div>
-              ) : (
-                "Kirish"
-              )}
-            </Button>
+            
+            <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+              <Button
+                type="submit"
+                disabled={isLoading}
+                variant="gradient"
+                className="w-full h-12 rounded-xl font-semibold"
+              >
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <Loader className="w-5 h-5 animate-spin" />
+                    Signing in...
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    Sign In
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                )}
+              </Button>
+            </motion.div>
           </form>
         </Form>
-        <GoogleButton variant="signin" route={"/sign-in"} />
+
         {/* Divider */}
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200" />
+            <div className="w-full border-t border-gray-200 dark:border-gray-700" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white/80 text-gray-500">yoki</span>
+            <span className="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+              or continue with
+            </span>
           </div>
         </div>
 
+        <GoogleButton variant="signin" route={"/sign-in"} />
+
         {/* Sign Up Link */}
-        <div className="text-center">
-          <p className="text-sm text-gray-600">
-            Siz hali ro&apos;yxatdan o&apos;tmaganmisiz?{" "}
-            <Button
-              asChild
-              variant="link"
-              className="p-0 h-auto text-purple-600 hover:text-purple-700 font-semibold"
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/sign-up"
+              className="font-semibold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
             >
-              <Link href="/sign-up">Ro&apos;yxatdan o&apos;tish</Link>
-            </Button>
+              Sign up
+            </Link>
           </p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

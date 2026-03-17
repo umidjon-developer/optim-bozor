@@ -45,24 +45,24 @@ export const authOptions: NextAuthOptions = {
 
   cookies: {
     sessionToken: {
-      name: "__Host-next-auth.session-token",
-      options: { httpOnly: true, secure: true, sameSite: "lax", path: "/" },
+      name: process.env.NODE_ENV === 'production' ? '__Host-next-auth.session-token' : 'next-auth.session-token',
+      options: { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/' },
     },
     callbackUrl: {
-      name: "__Host-next-auth.callback-url",
-      options: { secure: true, sameSite: "lax", path: "/" },
+      name: process.env.NODE_ENV === 'production' ? '__Host-next-auth.callback-url' : 'next-auth.callback-url',
+      options: { secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/' },
     },
     csrfToken: {
-      name: "__Host-next-auth.csrf-token",
-      options: { secure: true, sameSite: "lax", path: "/" },
+      name: process.env.NODE_ENV === 'production' ? '__Host-next-auth.csrf-token' : 'next-auth.csrf-token',
+      options: { secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/' },
     },
     state: {
-      name: "__Host-next-auth.state",
-      options: { httpOnly: true, secure: true, sameSite: "lax", path: "/" },
+      name: process.env.NODE_ENV === 'production' ? '__Host-next-auth.state' : 'next-auth.state',
+      options: { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/' },
     },
     pkceCodeVerifier: {
-      name: "__Host-next-auth.pkce.code_verifier",
-      options: { httpOnly: true, secure: true, sameSite: "lax", path: "/" },
+      name: process.env.NODE_ENV === 'production' ? '__Host-next-auth.pkce.code_verifier' : 'next-auth.pkce.code_verifier',
+      options: { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/' },
     },
   },
 

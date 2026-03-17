@@ -112,6 +112,9 @@ export const addFavorite = actionClient
       return { failure: data.error };
     }
 
+    // Revalidate the favorites page
+    revalidatePath("/favorites");
+
     return JSON.parse(JSON.stringify(data));
   });
 export async function addToCart({
@@ -131,6 +134,10 @@ export async function addToCart({
     { productId, quantity, selleronId },
     { headers: { Authorization: `Bearer ${token}` } }
   );
+
+  // Revalidate the cart page to show updated products
+  revalidatePath("/cart");
+  revalidatePath("/");
 
   return data;
 }
@@ -207,8 +214,9 @@ export async function addOrdersZakaz({
   return data;
 }
 
-export const getCart = actionClient.action<ReturnActionType>(async () => {
+export async function getCart() {
   const session = await getServerSession(authOptions);
+  console.log("getCart session", session);
   if (!session?.currentUser) {
     return { failure: "You must be logged in to get cart" };
   }
@@ -217,7 +225,7 @@ export const getCart = actionClient.action<ReturnActionType>(async () => {
     headers: { Authorization: `Bearer ${token}` },
   });
   return JSON.parse(JSON.stringify(data));
-});
+}
 
 export const clickCheckout = actionClient
   .schema(idSchema)
@@ -282,6 +290,7 @@ export const deleteFavorite = actionClient
         headers: { Authorization: `Bearer ${token}` },
       }
     );
+    revalidatePath("/favorites");
     revalidatePath("/dashboard/watch-list");
     return JSON.parse(JSON.stringify(data));
   });

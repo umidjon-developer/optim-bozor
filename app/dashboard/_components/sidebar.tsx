@@ -6,61 +6,94 @@ import { dashboardSidebar } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, Home, ArrowLeft } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Sidebar = () => {
   const pathname = usePathname();
 
   return (
-    <aside className="sticky top-0 left-0 h-screen flex flex-col border-r bg-background shadow-sm">
-      <div>
-        <div className="flex items-center justify-center h-36 border-b">
-          <Link href="/" className="flex items-center gap-2 md:gap-3">
-            <div className="w-10 h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 bg-gradient-to-br from-purple-600 to-violet-600 rounded-full flex items-center justify-center text-white font-bold shadow-sm ring-1 ring-purple-500/30">
-              O
-            </div>
-            <span className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-violet-600">
-              optim bozor
-            </span>
-          </Link>
-        </div>
+    <aside className="sticky top-0 left-0 h-screen w-64 flex flex-col border-r border-gray-200/50 dark:border-gray-800/50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl">
+      {/* Logo Section */}
+      <div className="p-6 border-b border-gray-100 dark:border-gray-800">
+        <Link href="/" className="flex items-center gap-3 group">
+          <motion.div
+            className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 via-violet-500 to-indigo-500 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-purple-500/25"
+            whileHover={{ scale: 1.05, rotate: 5 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            O
+          </motion.div>
+          <span className="text-xl font-bold gradient-text tracking-tight">
+            optim bozor
+          </span>
+        </Link>
       </div>
+
+      {/* Dashboard Header */}
       <div className="p-4">
         <div className="flex items-center gap-2 px-2">
-          <LayoutDashboard className="h-6 w-6" />
-          <h1 className="font-bold text-xl">Dashboard</h1>
-        </div>
-      </div>
-
-      <Separator />
-
-      <div className="flex-1 flex flex-col gap-1 p-3 overflow-y-auto">
-        {dashboardSidebar.map((item) => (
-          <Button
-            key={item.route}
-            asChild
-            variant={pathname === item.route ? "secondary" : "ghost"}
-            className={cn(
-              "justify-start gap-3 px-3 py-6 transition-all",
-              pathname === item.route
-                ? "font-medium bg-secondary"
-                : "hover:bg-secondary/50"
-            )}
-          >
-            <Link href={item.route} className="flex items-center">
-              <item.icon className="h-5 w-5 shrink-0" />
-              <span>{item.name}</span>
-            </Link>
-          </Button>
-        ))}
-      </div>
-
-      <div className="mt-auto p-4 border-t">
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-muted-foreground">
-            <p>© 2025 Company</p>
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/20 to-indigo-500/20 flex items-center justify-center">
+            <LayoutDashboard className="h-4 w-4 text-purple-600 dark:text-purple-400" />
           </div>
+          <h1 className="font-semibold text-gray-900 dark:text-gray-100">Dashboard</h1>
         </div>
+      </div>
+
+      <Separator className="mx-4" />
+
+      {/* Navigation */}
+      <nav className="flex-1 flex flex-col gap-1 p-3 overflow-y-auto">
+        {dashboardSidebar.map((item, index) => {
+          const isActive = pathname === item.route;
+          return (
+            <Link key={item.route} href={item.route}>
+              <motion.div
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                  isActive
+                    ? "bg-gradient-to-r from-purple-500/10 to-indigo-500/10 text-purple-700 dark:text-purple-300"
+                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-200"
+                )}
+                whileHover={{ x: 4 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <item.icon
+                  className={cn(
+                    "h-5 w-5 shrink-0",
+                    isActive && "text-purple-600 dark:text-purple-400"
+                  )}
+                />
+                <span>{item.name}</span>
+                {isActive && (
+                  <motion.div
+                    className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-600"
+                    layoutId="activeDashboardIndicator"
+                  />
+                )}
+              </motion.div>
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Footer */}
+      <div className="p-4 border-t border-gray-100 dark:border-gray-800">
+        <Link href="/">
+          <Button
+            variant="ghost"
+            className="w-full justify-start gap-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Store</span>
+          </Button>
+        </Link>
+        <p className="text-xs text-gray-400 dark:text-gray-500 text-center mt-3">
+          © 2025 Optim Bozor
+        </p>
       </div>
     </aside>
   );

@@ -1,80 +1,58 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Heart, ShoppingBag } from "lucide-react";
 
 interface EmptyStateProps {
   title: string;
   description?: string;
   ctaHref?: string;
   ctaText?: string;
-  imageSrc?: string; // optional custom illustration path
+  imageSrc?: string;
 }
 
 export default function EmptyState({
   title,
   description,
   ctaHref = "/",
-  ctaText = "Bosh sahifaga qaytish",
+  ctaText = "Go Back",
   imageSrc,
 }: EmptyStateProps) {
   return (
-    <div className="w-full flex flex-col items-center text-center py-12 sm:py-16">
+    <div className="w-full flex flex-col items-center text-center py-16 sm:py-24">
       {/* Illustration */}
       {imageSrc ? (
-        <div className="relative w-44 h-44 sm:w-56 sm:h-56 mb-6">
+        <div className="relative w-44 h-44 sm:w-56 sm:h-56 mb-8">
           <Image src={imageSrc} alt={title} fill className="object-contain" />
         </div>
       ) : (
-        <div className="mb-6">
-          {/* Inline SVG (shopping bag + heart) */}
-          <svg
-            width="164"
-            height="164"
-            viewBox="0 0 164 164"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="drop-shadow-sm"
-            aria-hidden
-          >
-            <defs>
-              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#8B5CF6" />
-                <stop offset="100%" stopColor="#7C3AED" />
-              </linearGradient>
-            </defs>
-            <circle cx="82" cy="82" r="78" fill="#F5F3FF" />
-            <rect x="38" y="58" width="88" height="70" rx="14" fill="url(#g)" />
-            <path
-              d="M58 58c0-11 9-20 20-20s20 9 20 20"
-              stroke="white"
-              strokeWidth="6"
-              strokeLinecap="round"
-              fill="none"
-            />
-            <circle cx="74" cy="86" r="6" fill="white" />
-            <circle cx="106" cy="86" r="6" fill="white" />
-            <path
-              d="M85.5 112.5l-10.2-9.4a8 8 0 0110.9-11.6l1.6 1.5 1.6-1.5a8 8 0 0110.9 11.6l-10.2 9.4a2 2 0 01-2.6 0z"
-              fill="#FDE68A"
-              stroke="#FCD34D"
-              strokeWidth="2"
-            />
-          </svg>
+        <div className="mb-8 relative">
+          {/* Gradient background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-violet-500/20 to-indigo-500/20 rounded-full blur-2xl" />
+          
+          {/* Icon container */}
+          <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 flex items-center justify-center">
+            <Heart className="w-12 h-12 sm:w-16 sm:h-16 text-purple-400 dark:text-purple-500" />
+          </div>
         </div>
       )}
 
-      <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
         {title}
       </h2>
+      
       {description ? (
-        <p className="mt-2 text-sm sm:text-base text-gray-600 max-w-md">
+        <p className="mt-3 text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-md">
           {description}
         </p>
       ) : null}
 
       {ctaHref ? (
-        <Link href={ctaHref} className="mt-6">
-          <Button className="rounded-xl">{ctaText}</Button>
+        <Link href={ctaHref} className="mt-8">
+          <Button variant="gradient" className="rounded-xl font-medium">
+            <ShoppingBag className="w-4 h-4 mr-2" />
+            {ctaText}
+          </Button>
         </Link>
       ) : null}
     </div>

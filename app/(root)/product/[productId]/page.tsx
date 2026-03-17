@@ -7,11 +7,24 @@ import { notFound } from 'next/navigation'
 import AddToCartButton from '../_components/AddToCartButton'
 import CustomImage from '@/components/shared/custom-image'
 import { FC } from 'react'
-
 import HearComponent from '../../_components/HearComponent'
+import { Separator } from '@/components/ui/separator'
+import { Card, CardContent } from '@/components/ui/card'
+import { 
+	Store, 
+	Mail, 
+	Phone, 
+	ShieldCheck, 
+	Truck, 
+	RotateCcw,
+	Package,
+	Star
+} from 'lucide-react'
+
 interface Props {
 	params: Params
 }
+
 export async function generateMetadata({ params }: Props) {
 	const { productId } = params
 	const res = await getProduct({ id: productId })
@@ -23,80 +36,183 @@ export async function generateMetadata({ params }: Props) {
 		openGraph: { images: product?.image },
 	}
 }
+
 const Page: FC<Props> = async ({ params }: Props) => {
 	const { productId } = await params
 	const res = await getProduct({ id: productId })
 	const product = res?.data?.product
-	console.log('productId', product)
+
 	if (!product) return notFound()
-	console.log('product', product)
 
 	return (
-		<div className='container mx-auto px-4 py-6 max-w-7xl'>
-			<div className='grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8'>
-				{/* Product Image - Full width on mobile, 2 columns on large screens */}
-				<div className='bg-secondary relative w-full h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] rounded-lg overflow-hidden lg:col-span-2'>
-					<CustomImage
-						src={product.image || '/placeholder.svg'}
-						className='object-contain mx-auto p-2'
-						alt={product.title}
-					/>
+		<div className='min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-purple-950/30'>
+			<div className='container mx-auto px-4 py-8 max-w-7xl'>
+				{/* Breadcrumb */}
+				<div className='flex items-center gap-2 text-sm text-muted-foreground mb-6'>
+					<span className='hover:text-primary cursor-pointer transition-colors'>Bosh sahifa</span>
+					<span>/</span>
+					<span className='hover:text-primary cursor-pointer transition-colors'>{product?.category?.name}</span>
+					<span>/</span>
+					<span className='text-foreground font-medium truncate max-w-[200px]'>{product.title}</span>
 				</div>
 
-				{/* Product Details - Stacks vertically on mobile */}
-				<div className='flex flex-col space-y-4 lg:self-start lg:sticky lg:top-20 p-2'>
-					<HearComponent productId={productId} />
+				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12'>
+					{/* Product Image Section */}
+					<div className='relative'>
+						{/* Image Container with Glass Effect */}
+						<div className='relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl overflow-hidden shadow-xl shadow-purple-500/5 border border-white/50 dark:border-slate-800/50'>
+							{/* Gradient Overlay */}
+							<div className='absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-indigo-500/5 pointer-events-none' />
+							
+							{/* Favorite Button */}
+							<div className='absolute top-4 right-4 z-10'>
+								<HearComponent productId={productId} />
+							</div>
 
-					<h1 className='font-bold text-xl sm:text-2xl md:text-3xl break-words'>
-						{product.title}
-					</h1>
-					<Badge className='w-fit text-sm' variant={'secondary'}>
-						# {product?.category?.name}
-					</Badge>
-					<p className='text-sm md:text-base break-words'>
-						{product.description}
-					</p>
-					<p className='font-bold text-xl md:text-2xl text-wrap'>
-						{formatPrice(+product.price)}
-					</p>
-					{/* <CreateOrderButton /> */}
-					<div className='flex flex-col space-y-2 w-full sm:w-auto'>
-						<AddToCartButton
-							productId={product._id}
-							selleronId={product?.userId?._id}
-						/>
-					</div>
-				</div>
-			</div>
-
-			{/* Seller Information - Full width with better spacing */}
-			<div className='mt-8 p-4 border rounded-lg bg-card shadow-sm'>
-				<h1 className='font-bold text-lg md:text-xl mb-4'>
-					Sotuvchi firma malumoti
-				</h1>
-				<div className='flex items-center space-x-4'>
-					{product?.userId?.phone1 ? (
-						<Image
-							src={product.userId.phone1 ?? ''}
-							width={50}
-							height={50}
-							className='rounded-full object-cover'
-							alt={product?.userId?.fullName}
-						/>
-					) : (
-						<div className='w-12 h-12 sm:w-14 sm:h-14 bg-secondary rounded-full flex items-center justify-center font-bold text-lg'>
-							{product?.userId?.fullName.slice(0, 2).toUpperCase()}
+							{/* Product Image */}
+							<div className='relative w-full aspect-square sm:aspect-[4/3] lg:aspect-square'>
+								<CustomImage
+									src={product.image || '/placeholder.svg'}
+									className='object-contain mx-auto p-6'
+									alt={product.title}
+								/>
+							</div>
 						</div>
-					)}
-					<div>
-						<p className='font-bold text-base md:text-lg'>
-							{product?.userId?.fullName}
-						</p>
-						<p className='text-sm md:text-base text-muted-foreground'>
-							{product?.userId?.email}
-						</p>
+
+						{/* Trust Badges */}
+						<div className='grid grid-cols-3 gap-3 mt-4'>
+							{[
+								{ icon: ShieldCheck, label: 'Sifat kafolati' },
+								{ icon: Truck, label: 'Tezkor yetkazib berish' },
+								{ icon: RotateCcw, label: 'Qaytarish imkoniyati' },
+							].map((item, i) => (
+								<div 
+									key={i}
+									className='flex flex-col items-center gap-1.5 p-3 bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm rounded-xl border border-white/50 dark:border-slate-800/50'
+								>
+									<item.icon className='w-5 h-5 text-purple-500' />
+									<span className='text-xs text-muted-foreground text-center'>{item.label}</span>
+								</div>
+							))}
+						</div>
+					</div>
+
+					{/* Product Details Section */}
+					<div className='flex flex-col'>
+						{/* Main Info Card */}
+						<Card className='bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/50 dark:border-slate-800/50 shadow-xl shadow-purple-500/5 rounded-2xl overflow-hidden'>
+							<CardContent className='p-6 sm:p-8'>
+								{/* Category Badge */}
+								<Badge 
+									variant='secondary' 
+									className='bg-gradient-to-r from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 text-purple-700 dark:text-purple-300 border-0 rounded-full px-4 py-1 text-sm font-medium mb-4'
+								>
+									{product?.category?.name}
+								</Badge>
+
+								{/* Title */}
+								<h1 className='font-bold text-2xl sm:text-3xl lg:text-4xl text-slate-900 dark:text-white mb-4 leading-tight'>
+									{product.title}
+								</h1>
+
+								{/* Rating */}
+								<div className='flex items-center gap-2 mb-4'>
+									<div className='flex items-center gap-1'>
+										{[1, 2, 3, 4, 5].map((star) => (
+											<Star key={star} className='w-4 h-4 fill-yellow-400 text-yellow-400' />
+										))}
+									</div>
+									<span className='text-sm text-muted-foreground'>(4.8) · 120 sharhlar</span>
+								</div>
+
+								<Separator className='my-6 bg-slate-200/50 dark:bg-slate-700/50' />
+
+								{/* Price Section */}
+								<div className='flex items-baseline gap-3 mb-6'>
+									<span className='text-4xl sm:text-5xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent'>
+										{formatPrice(+product.price)}
+									</span>
+								</div>
+
+								{/* Description */}
+								<div className='mb-8'>
+									<h3 className='font-semibold text-lg mb-2 text-slate-700 dark:text-slate-200'>Tavsif</h3>
+									<p className='text-muted-foreground leading-relaxed'>
+										{product.description}
+									</p>
+								</div>
+
+								<Separator className='my-6 bg-slate-200/50 dark:bg-slate-700/50' />
+
+								{/* Add to Cart Button */}
+								<AddToCartButton
+									productId={product._id}
+									selleronId={product?.userId?._id}
+								/>
+							</CardContent>
+						</Card>
 					</div>
 				</div>
+
+				{/* Seller Information */}
+				<Card className='mt-8 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/50 dark:border-slate-800/50 shadow-xl shadow-purple-500/5 rounded-2xl overflow-hidden'>
+					<CardContent className='p-6 sm:p-8'>
+						<div className='flex items-center gap-3 mb-6'>
+							<div className='w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center'>
+								<Store className='w-5 h-5 text-white' />
+							</div>
+							<h2 className='font-bold text-xl text-slate-900 dark:text-white'>Sotuvchi ma'lumoti</h2>
+						</div>
+						
+						<div className='flex flex-col sm:flex-row sm:items-center gap-6'>
+							{/* Seller Avatar */}
+							<div className='flex items-center gap-4'>
+								{product?.userId?.phone1 ? (
+									<Image
+										src={product.userId.phone1 ?? ''}
+										width={64}
+										height={64}
+										className='rounded-2xl object-cover ring-4 ring-purple-500/10'
+										alt={product?.userId?.fullName}
+									/>
+								) : (
+									<div className='w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-purple-500/20'>
+										{product?.userId?.fullName?.slice(0, 2).toUpperCase()}
+									</div>
+								)}
+								<div>
+									<h3 className='font-bold text-lg text-slate-900 dark:text-white'>
+										{product?.userId?.fullName}
+									</h3>
+									<div className='flex items-center gap-2 mt-1'>
+										<Badge variant='outline' className='rounded-full text-xs'>
+											<ShieldCheck className='w-3 h-3 mr-1 text-green-500' />
+											Tasdiqlangan
+										</Badge>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<Separator orientation='vertical' className='hidden sm:block h-16' />
+
+						{/* Contact Info */}
+						<div className='flex flex-wrap gap-4 sm:gap-6'>
+							{product?.userId?.email && (
+								<div className='flex items-center gap-2 text-muted-foreground'>
+									<Mail className='w-4 h-4 text-purple-500' />
+									<span className='text-sm'>{product?.userId?.email}</span>
+								</div>
+							)}
+							{product?.userId?.phone1 && (
+								<div className='flex items-center gap-2 text-muted-foreground'>
+									<Phone className='w-4 h-4 text-purple-500' />
+									<span className='text-sm'>{product?.userId?.phone1}</span>
+								</div>
+							)}
+					</div>
+				</CardContent>
+				</Card>
 			</div>
 		</div>
 	)

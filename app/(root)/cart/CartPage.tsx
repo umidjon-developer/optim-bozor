@@ -11,6 +11,7 @@ import {
   AlertCircle,
   Map,
   Loader,
+  ShoppingBag,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -123,17 +124,29 @@ const CartPage: React.FC<CartProps> = ({ products: initialProducts }) => {
 
   if (!products || products.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center  h-full mt-20">
-        <Image
-          src="/savat.png"
-          alt="Empty Cart"
-          width={450}
-          height={450}
-          className="mb-4"
-        />
+      <div className="flex flex-col items-center justify-center min-h-[60vh] py-16">
+        {/* Gradient background */}
+        <div className="relative mb-8">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-violet-500/20 to-indigo-500/20 rounded-full blur-3xl" />
+          
+          {/* Icon container */}
+          <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 flex items-center justify-center">
+            <ShoppingBag className="w-12 h-12 sm:w-16 sm:h-16 text-purple-400 dark:text-purple-500" />
+          </div>
+        </div>
+
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+          Your cart is empty
+        </h2>
+        <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mb-8 text-center max-w-md">
+          Looks like you haven&apos;t added any products yet. Start shopping to fill your cart!
+        </p>
 
         <Link href={"/"}>
-          <Button>Do&apos;konga qaytish</Button>
+          <Button variant="gradient" className="rounded-xl font-medium">
+            <ShoppingBag className="w-4 h-4 mr-2" />
+            Browse Products
+          </Button>
         </Link>
       </div>
     );
