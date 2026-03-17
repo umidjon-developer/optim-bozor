@@ -7,7 +7,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Edit2, Loader, Camera, User as UserIcon, Mail, Phone } from "lucide-react";
+import { Loader, Camera, User as UserIcon, Mail, Phone } from "lucide-react";
 import FullNameForm from "./full-name.form";
 import EmailForm from "./email.form";
 import { IUser } from "@/types";
@@ -25,7 +24,6 @@ import useAction from "@/hooks/use-action";
 import { updateUser } from "@/actions/user.action";
 import { toast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
-import { Skeleton } from "@/components/ui/skeleton";
 import PhoneForm from "./phone.form";
 import { motion } from "framer-motion";
 

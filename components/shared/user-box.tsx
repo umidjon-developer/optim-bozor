@@ -11,7 +11,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { signOut } from "next-auth/react";
-import { LogOut, User, Settings, LayoutDashboard } from "lucide-react";
+import { LogOut, Settings, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import {
   AlertDialog,

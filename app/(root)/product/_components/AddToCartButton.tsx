@@ -51,17 +51,17 @@ export default function AddToCartButton({ productId, selleronId }: Props) {
 					{isLoading ? (
 						<>
 							<Loader2 className='w-5 h-5 mr-2 animate-spin' />
-							Qo'shilmoqda...
+							Qo&apos;shilmoqda...
 						</>
 					) : isSuccess ? (
 						<>
 							<Check className='w-5 h-5 mr-2' />
-							Qo'shildi!
+							Qo&apos;shildi!
 						</>
 					) : (
 						<>
 							<ShoppingCart className='w-5 h-5 mr-2' />
-							Savatga qo'shish
+							Savatga qo&apos;shish
 						</>
 					)}
 				</Button>
