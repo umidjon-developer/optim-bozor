@@ -8,7 +8,8 @@ import { Home, Heart, ShoppingBag, User } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-const isActivePath = (pathname: string, href: string) => {
+const isActivePath = (pathname: string | null, href: string) => {
+  if (!pathname) return false;
   if (href === "/") return pathname === "/";
   return pathname.startsWith(href);
 };
