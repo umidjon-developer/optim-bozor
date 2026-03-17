@@ -8,7 +8,8 @@ export default function CatalogSiderbar({
 }: {
   categories: Category[];
 }) {
-  const { slug } = useParams();
+  const params = useParams();
+  const slug = params?.slug as string | undefined;
   return (
     <div className="w-full md:w-[400px]">
       <div className="border rounded-lg p-4 bg-white">
