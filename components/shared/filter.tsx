@@ -13,9 +13,10 @@ const Filter = () => {
 
 	const onInputSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value
+		const params = searchParams?.toString() ?? ''
 		const newUrl = formUrlQuery({
 			key: 'q',
-			params: searchParams.toString(),
+			params,
 			value,
 		})
 		router.push(newUrl)
@@ -23,7 +24,7 @@ const Filter = () => {
 		if (value === '') {
 			const newUrl = removeUrlQuery({
 				key: 'q',
-				params: searchParams.toString(),
+				params,
 			})
 			router.push(newUrl)
 		}

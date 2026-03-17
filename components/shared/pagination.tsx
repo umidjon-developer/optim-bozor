@@ -19,7 +19,7 @@ const Pagination: FC<Props> = ({ isNext, pageNumber }) => {
 			direction === 'prev' ? pageNumber - 1 : pageNumber + 1
 
 		// Read searchParams inside event handler
-		const params = new URLSearchParams(searchParams.toString())
+		const params = new URLSearchParams(searchParams?.toString() ?? '')
 
 		const newUrl = formUrlQuery({
 			key: 'page',
