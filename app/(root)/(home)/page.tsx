@@ -3,7 +3,6 @@ import Pagination from "@/components/shared/pagination";
 import { Separator } from "@/components/ui/separator";
 import { SearchParams } from "@/types";
 import { FC, Suspense } from "react";
-import ProductGrid from "../_components/product-grid";
 import Banner from "../_components/banner";
 import CategoryCards from "../_components/category-cards";
 import Footer from "../_components/footer";

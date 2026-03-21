@@ -4,8 +4,7 @@ import { getCart } from '@/actions/user.action'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-options'
 import { redirect } from 'next/navigation'
-import { ShoppingBag } from 'lucide-react'
-import Link from 'next/link'
+
 
 const CartPage = dynamic(() => import('./CartPage'), { ssr: false })
 

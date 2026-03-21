@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ShoppingBag, Zap, Truck, Shield, Star, ArrowRight, Sparkles } from "lucide-react";
+import { ShoppingBag, Truck, Shield, Star, ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 export default function HeroSection() {
@@ -36,7 +36,7 @@ export default function HeroSection() {
             >
               <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
               <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">
-                O'zbekistonning premium bozori
+                O&apos;zbekistonning premium bozori
               </span>
             </motion.div>
 
@@ -75,7 +75,7 @@ export default function HeroSection() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  Katalogni ko'rish
+                  Katalogni ko&apos;rish
                 </motion.button>
               </Link>
             </div>

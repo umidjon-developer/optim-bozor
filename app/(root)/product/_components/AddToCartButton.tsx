@@ -61,11 +61,11 @@ export default function AddToCartButton({ productId, selleronId }: Props) {
       whileTap={{ scale: 0.99 }}
     >
       {isLoading ? (
-        <><Loader2 className="w-5 h-5 animate-spin" />Qo'shilmoqda...</>
+        <><Loader2 className="w-5 h-5 animate-spin" />Qo&apos;shilmoqda...</>
       ) : isSuccess ? (
-        <><Check className="w-5 h-5" />Savatga qo'shildi!</>
+        <><Check className="w-5 h-5" />Savatga qo&apos;shildi!</>
       ) : (
-        <><ShoppingCart className="w-5 h-5" />Savatga qo'shish</>
+        <><ShoppingCart className="w-5 h-5" />Savatga qo&apos;shish</>
       )}
     </motion.button>
   )

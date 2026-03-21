@@ -103,7 +103,7 @@ export default function Footer() {
             </span>
           </div>
           <p className="text-sm text-white/50 leading-relaxed">
-            O'zbekistondagi eng yaxshi onlayn do'kon. Sifatli mahsulotlar, tez
+            O&apos;zbekistondagi eng yaxshi onlayn do&apos;kon. Sifatli mahsulotlar, tez
             yetkazib berish va qulay narxlar.
           </p>
           <div className="space-y-2.5">

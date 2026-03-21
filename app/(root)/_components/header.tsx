@@ -1,7 +1,6 @@
 "use client";
 
 import UserBox from "@/components/shared/user-box";
-import { Button } from "@/components/ui/button";
 import {
   User,
   Heart,
@@ -9,7 +8,6 @@ import {
   Search,
   Bell,
   X,
-  ShoppingCart,
 } from "lucide-react";
 import Link from "next/link";
 import { FC, useState, useEffect, useRef } from "react";
