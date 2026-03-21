@@ -50,7 +50,7 @@ export const getProduct = actionClient
   .schema(idSchema)
   .action<ReturnActionType>(async ({ parsedInput }) => {
     const { data } = await axiosClient.get(
-      `/api/user/product/${parsedInput.id}`,
+      `/api/user/product/${parsedInput.id}`
     );
     return JSON.parse(JSON.stringify(data));
   });
@@ -61,7 +61,7 @@ export const getProductCategorySlug = async ({
 }) => {
   console.log(parsedInput, "parsedInput");
   const { data } = await axiosClient.get(
-    `/api/user/products-category/${parsedInput?.id}`,
+    `/api/user/products-category/${parsedInput?.id}`
   );
   console.log(data, "data");
   return JSON.parse(JSON.stringify(data));
@@ -70,11 +70,11 @@ export const getProductCategorySlug = async ({
 export const getStatistics = actionClient.action<ReturnActionType>(async () => {
   const session = await getServerSession(authOptions);
   const userId = getAuthenticatedUserId(session);
-
+  
   if (!userId) {
     return { failure: "Authentication required" };
   }
-
+  
   const token = await generateToken(userId);
   const { data } = await axiosClient.get(`/api/user/statistics`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -87,11 +87,11 @@ export const getOrders = actionClient
   .action<OrdersResponse>(async ({ parsedInput }) => {
     const session = await getServerSession(authOptions);
     const userId = getAuthenticatedUserId(session);
-
+    
     if (!userId) {
       throw new Error("You must be logged in to view orders");
     }
-
+    
     const token = await generateToken(userId);
     const { data } = await axiosClient.get("/api/user/order", {
       headers: { Authorization: `Bearer ${token}` },
@@ -106,11 +106,11 @@ export const getTransactions = actionClient
   .action<ReturnActionType>(async ({ parsedInput }) => {
     const session = await getServerSession(authOptions);
     const userId = getAuthenticatedUserId(session);
-
+    
     if (!userId) {
       throw new Error("You must be logged in to view transactions");
     }
-
+    
     const token = await generateToken(userId);
     const { data } = await axiosClient.get("/api/user/transactions", {
       headers: { Authorization: `Bearer ${token}` },
@@ -124,11 +124,11 @@ export const getFavourites = actionClient
   .action<ReturnActionType>(async ({ parsedInput }) => {
     const session = await getServerSession(authOptions);
     const userId = getAuthenticatedUserId(session);
-
+    
     if (!userId) {
       throw new Error("You must be logged in to view favorites");
     }
-
+    
     const token = await generateToken(userId);
     const { data } = await axiosClient.get("/api/user/favorites", {
       headers: { Authorization: `Bearer ${token}` },
@@ -143,13 +143,14 @@ export const addFavorite = actionClient
     const session = await getServerSession(authOptions);
     const userId = getAuthenticatedUserId(session);
 
-    if (!userId) return { failure: "You must be logged in to add a favorite" };
-
+    if (!userId)
+      return { failure: "You must be logged in to add a favorite" };
+      
     const token = await generateToken(userId);
     const { data } = await axiosClient.post(
       "/api/user/add-favorite",
       { productId: parsedInput.id },
-      { headers: { Authorization: `Bearer ${token}` } },
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     if (data?.error) {
       return { failure: data.error };
@@ -167,7 +168,7 @@ export async function addToCart({
 }: CartProps) {
   const session = await getServerSession(authOptions);
   const userId = getAuthenticatedUserId(session);
-
+  
   if (!userId) {
     return { failure: "You must be logged in to add to cart" };
   }
@@ -177,7 +178,7 @@ export async function addToCart({
   const { data } = await axiosClient.post(
     "/api/user/add-cart",
     { productId, quantity, selleronId },
-    { headers: { Authorization: `Bearer ${token}` } },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   // Revalidate the cart page to show updated products
@@ -205,7 +206,7 @@ export async function getCategorieSlug(slug: string) {
 export async function removeFromCart() {
   const session = await getServerSession(authOptions);
   const userId = getAuthenticatedUserId(session);
-
+  
   if (!userId) {
     return { failure: "You must be logged in to remove from cart" };
   }
@@ -217,7 +218,7 @@ export async function removeFromCart() {
     {},
     {
       headers: { Authorization: `Bearer ${token}` },
-    },
+    }
   );
 
   return data;
@@ -243,7 +244,7 @@ export async function addOrdersZakaz({
     latitude,
     longitude,
     isPaid,
-    totalPrice,
+    totalPrice
   );
 
   const { data } = await axiosClient.post(
@@ -255,7 +256,7 @@ export async function addOrdersZakaz({
       isPaid,
       totalPrice,
     },
-    { headers: { Authorization: `Bearer ${token}` } },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return data;
@@ -264,12 +265,12 @@ export async function addOrdersZakaz({
 export async function getCart() {
   const session = await getServerSession(authOptions);
   const userId = getAuthenticatedUserId(session);
-
+  
   if (!userId) {
     // pendingOAuth holatida bo'sh cart qaytaramiz (xato emas)
     return { data: { cart: { products: [] } } };
   }
-
+  
   const token = await generateToken(userId);
   const { data } = await axiosClient.get("/api/user/get-cart", {
     headers: { Authorization: `Bearer ${token}` },
@@ -282,15 +283,15 @@ export const clickCheckout = actionClient
   .action<ReturnActionType>(async ({ parsedInput }) => {
     const session = await getServerSession(authOptions);
     const userId = getAuthenticatedUserId(session);
-
+    
     if (!userId)
       return { failure: "You must be logged in to apply for a product" };
-
+      
     const token = await generateToken(userId);
     const { data } = await axiosClient.post(
       "/api/click/checkout",
       { productId: parsedInput.id },
-      { headers: { Authorization: `Bearer ${token}` } },
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     return JSON.parse(JSON.stringify(data));
   });
@@ -300,17 +301,17 @@ export const updateUser = actionClient
   .action<ReturnActionType>(async ({ parsedInput }) => {
     const session = await getServerSession(authOptions);
     const userId = getAuthenticatedUserId(session);
-
+    
     if (!userId)
       return { failure: "You must be logged in to update your profile" };
-
+      
     const token = await generateToken(userId);
     const { data } = await axiosClient.put(
       "/api/user/update-profile",
       parsedInput,
       {
         headers: { Authorization: `Bearer ${token}` },
-      },
+      }
     );
     revalidatePath("/dashboard");
     return JSON.parse(JSON.stringify(data));
@@ -321,17 +322,17 @@ export const updatePassword = actionClient
   .action<ReturnActionType>(async ({ parsedInput }) => {
     const session = await getServerSession(authOptions);
     const userId = getAuthenticatedUserId(session);
-
+    
     if (!userId)
       return { failure: "You must be logged in to update your password" };
-
+      
     const token = await generateToken(userId);
     const { data } = await axiosClient.put(
       "/api/user/update-password",
       parsedInput,
       {
         headers: { Authorization: `Bearer ${token}` },
-      },
+      }
     );
     return JSON.parse(JSON.stringify(data));
   });
@@ -341,16 +342,16 @@ export const deleteFavorite = actionClient
   .action<ReturnActionType>(async ({ parsedInput }) => {
     const session = await getServerSession(authOptions);
     const userId = getAuthenticatedUserId(session);
-
+    
     if (!userId)
       return { failure: "You must be logged in to delete a favorite" };
-
+      
     const token = await generateToken(userId);
     const { data } = await axiosClient.delete(
       `/api/user/delete-favorite/${parsedInput.id}`,
       {
         headers: { Authorization: `Bearer ${token}` },
-      },
+      }
     );
     revalidatePath("/favorites");
     revalidatePath("/dashboard/watch-list");

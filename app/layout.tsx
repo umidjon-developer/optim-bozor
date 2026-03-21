@@ -48,7 +48,6 @@ export const metadata: Metadata = {
 
 const RootLayout: FC<ChildProps> = ({ children }) => {
   return (
-<<<<<<< HEAD
     <html lang="uz" suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.json" />
@@ -58,15 +57,6 @@ const RootLayout: FC<ChildProps> = ({ children }) => {
         suppressHydrationWarning
       >
         <Providers>
-=======
-    <Providers>
-      <html lang="uz" suppressHydrationWarning>
-        <body
-          className={`${inter.variable} font-sans antialiased`}
-          suppressHydrationWarning
-        >
-          <link rel="manifest" href="/manifest.json" />
->>>>>>> 32a527e59bb40d0b6ca5d32175de1428908e676a
           <NextTopLoader showSpinner={false} />
           <main>{children}</main>
           <ToastContainer
@@ -75,15 +65,9 @@ const RootLayout: FC<ChildProps> = ({ children }) => {
             theme="colored"
           />
           <Toaster />
-<<<<<<< HEAD
         </Providers>
       </body>
     </html>
-=======
-        </body>
-      </html>
-    </Providers>
->>>>>>> 32a527e59bb40d0b6ca5d32175de1428908e676a
   );
 };
 

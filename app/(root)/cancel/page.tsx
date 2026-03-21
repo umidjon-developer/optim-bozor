@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -18,21 +17,35 @@ export default function CancelPage() {
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
           className="w-24 h-24 rounded-3xl flex items-center justify-center mb-6"
-          style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}
+          style={{
+            background: "rgba(239,68,68,0.08)",
+            border: "1px solid rgba(239,68,68,0.2)",
+          }}
         >
           <XCircle className="w-12 h-12 text-rose-500" />
         </motion.div>
-        <h1 className="text-2xl font-bold text-foreground mb-2">Buyurtma bekor qilindi</h1>
-        <p className="text-muted-foreground text-sm mb-8">Buyurtmangiz bekor qilindi. Savatingiz saqlanib qoldi.</p>
+        <h1 className="text-2xl font-bold text-foreground mb-2">
+          Buyurtma bekor qilindi
+        </h1>
+        <p className="text-muted-foreground text-sm mb-8">
+          Buyurtmangiz bekor qilindi. Savatingiz saqlanib qoldi.
+        </p>
         <div className="flex gap-3">
           <Link href="/cart">
             <button className="flex items-center gap-2 h-11 px-5 rounded-xl font-semibold text-sm border border-border hover:bg-secondary transition-colors text-foreground">
-              <ArrowLeft className="w-4 h-4" />Savatga qaytish
+              <ArrowLeft className="w-4 h-4" />
+              Savatga qaytish
             </button>
           </Link>
           <Link href="/">
-            <button className="flex items-center gap-2 h-11 px-5 rounded-xl font-semibold text-sm text-white hover:opacity-90 transition-all" style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}>
-              <ShoppingBag className="w-4 h-4" />Xarid qilish
+            <button
+              className="flex items-center gap-2 h-11 px-5 rounded-xl font-semibold text-sm text-white hover:opacity-90 transition-all"
+              style={{
+                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+              }}
+            >
+              <ShoppingBag className="w-4 h-4" />
+              Xarid qilish
             </button>
           </Link>
         </div>
@@ -40,30 +53,3 @@ export default function CancelPage() {
     </div>
   );
 }
-=======
-import { Button } from '@/components/ui/button'
-import { X } from 'lucide-react'
-import Link from 'next/link'
-
-const Page = () => {
-	return (
-		<div className='flex justify-center items-center w-full h-[80vh]'>
-			<div className='relative p-4 w-full max-w-md h-full md:h-auto'>
-				<div className='relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5'>
-					<div className='w-12 h-12 rounded-full bg-red-100 dark:bg-red-900 p-2 flex items-center justify-center mx-auto mb-3.5'>
-						<X />
-					</div>
-					<p className='mb-4 text-lg text-gray-900 dark:text-white'>Your payment was not processed</p>
-					<Button asChild>
-						<Link href={'/dashboard'}>
-							<span>Back to home</span>
-						</Link>
-					</Button>
-				</div>
-			</div>
-		</div>
-	)
-}
-
-export default Page
->>>>>>> 32a527e59bb40d0b6ca5d32175de1428908e676a

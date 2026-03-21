@@ -7,61 +7,62 @@ const getClientIp = (req: NextRequest): string => {
   return forwarded?.split(",")[0]?.trim() || "unknown";
 };
 
-// Login talab qiladigan sahifalar
-const PROTECTED = ["/cart", "/favorites", "/dashboard"];
+// Himoya talab qiladigan sahifalar
+const PROTECTED_PATHS = ["/cart", "/favorites", "/dashboard"];
+// Faqat pendingOAuth uchun ruxsat berilgan sahifalar
+const OAUTH_ALLOWED = ["/oauth/phone", "/api/auth", "/sign-in", "/sign-out"];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Rate limiting — faqat API va asosiy sahifalar uchun
-  if (!pathname.startsWith("/_next") && !pathname.includes(".")) {
-    const ip = getClientIp(req);
-    if (!rateLimiter(ip)) {
-      return NextResponse.json(
-        { message: "Too many requests, please try again later." },
-        { status: 429 },
-      );
-    }
+  // Rate limiting
+  const ip = getClientIp(req);
+  if (!rateLimiter(ip)) {
+    return NextResponse.json(
+      { message: "Too many requests, please try again later." },
+      { status: 429 }
+    );
   }
 
-  // Static fayllar va NextAuth API ni o'tkazib yuborish
+  // Static / API route larni o'tkazib yuborish
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api/auth") ||
-    pathname.startsWith("/api/uploadthing") ||
     pathname.includes(".")
   ) {
     return NextResponse.next();
   }
 
-  // Token olish
+  // Token ni tekshirish
   const token = await getToken({
     req,
-    secret: process.env.NEXTAUTH_SECRET || process.env.NEXT_AUTH_SECRET,
+    secret: process.env.NEXT_AUTH_SECRET || process.env.NEXTAUTH_SECRET,
   });
 
-  // pendingOAuth → /oauth/phone ga yo'naltirish
-  const isPendingOAuth =
-    token?.pendingOAuth &&
-    !token?.userId &&
-    pathname !== "/oauth/phone" &&
-    !pathname.startsWith("/sign-");
-
+  // 1. pendingOAuth holati — user Google orqali kirgan lekin backend ro'yxati yo'q
+  //    Faqat /oauth/phone sahifasiga ruxsat, qolganlar redirect
+  const isPendingOAuth = token?.pendingOAuth && !token?.userId;
   if (isPendingOAuth) {
-    return NextResponse.redirect(new URL("/oauth/phone", req.url));
+    const isAllowed = OAUTH_ALLOWED.some((p) => pathname.startsWith(p));
+    if (!isAllowed && pathname !== "/oauth/phone") {
+      const url = req.nextUrl.clone();
+      url.pathname = "/oauth/phone";
+      return NextResponse.redirect(url);
+    }
   }
 
-  // Himoyalangan sahifalar → login yo'q bo'lsa /sign-in
-  const isProtected = PROTECTED.some((p) => pathname.startsWith(p));
+  // 2. Himoyalangan sahifalar — login bo'lmasa /sign-in ga
+  const isProtected = PROTECTED_PATHS.some((p) => pathname.startsWith(p));
   if (isProtected && !token) {
-    const signInUrl = new URL("/sign-in", req.url);
-    signInUrl.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(signInUrl);
+    const url = req.nextUrl.clone();
+    url.pathname = "/sign-in";
+    url.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };

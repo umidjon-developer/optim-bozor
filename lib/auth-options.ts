@@ -14,14 +14,14 @@ const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || "";
  */
 async function oauthLoginOrRegister(
   email: string,
-  fullName: string,
+  fullName: string
 ): Promise<string | null> {
   try {
     const res = await fetch(`${SERVER_URL}/api/auth/oauth-login`, {
-      method: "POST",
+      method:  "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, fullName }),
-      cache: "no-store",
+      body:    JSON.stringify({ email, fullName }),
+      cache:   "no-store",
     });
 
     if (!res.ok) return null;
@@ -33,60 +33,29 @@ async function oauthLoginOrRegister(
 }
 
 // Development da secure cookie o'chirish (HTTPS yo'q)
-const useSecureCookies =
-  process.env.NEXTAUTH_URL?.startsWith("https://") ?? false;
+const useSecureCookies = process.env.NEXTAUTH_URL?.startsWith("https://") ?? false;
 
 export const authOptions: NextAuthOptions = {
   cookies: {
     sessionToken: {
-      name: useSecureCookies
-        ? "__Secure-next-auth.session-token"
-        : "next-auth.session-token",
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: useSecureCookies,
-      },
+      name: useSecureCookies ? "__Secure-next-auth.session-token" : "next-auth.session-token",
+      options: { httpOnly: true, sameSite: "lax", path: "/", secure: useSecureCookies },
     },
     callbackUrl: {
-      name: useSecureCookies
-        ? "__Secure-next-auth.callback-url"
-        : "next-auth.callback-url",
+      name: useSecureCookies ? "__Secure-next-auth.callback-url" : "next-auth.callback-url",
       options: { sameSite: "lax", path: "/", secure: useSecureCookies },
     },
     csrfToken: {
-      name: useSecureCookies
-        ? "__Host-next-auth.csrf-token"
-        : "next-auth.csrf-token",
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: useSecureCookies,
-      },
+      name: useSecureCookies ? "__Host-next-auth.csrf-token" : "next-auth.csrf-token",
+      options: { httpOnly: true, sameSite: "lax", path: "/", secure: useSecureCookies },
     },
     state: {
       name: useSecureCookies ? "__Secure-next-auth.state" : "next-auth.state",
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: useSecureCookies,
-        maxAge: 900,
-      },
+      options: { httpOnly: true, sameSite: "lax", path: "/", secure: useSecureCookies, maxAge: 900 },
     },
     pkceCodeVerifier: {
-      name: useSecureCookies
-        ? "__Secure-next-auth.pkce.code_verifier"
-        : "next-auth.pkce.code_verifier",
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: useSecureCookies,
-        maxAge: 900,
-      },
+      name: useSecureCookies ? "__Secure-next-auth.pkce.code_verifier" : "next-auth.pkce.code_verifier",
+      options: { httpOnly: true, sameSite: "lax", path: "/", secure: useSecureCookies, maxAge: 900 },
     },
   },
   providers: [
@@ -97,16 +66,16 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.userId) return null;
         try {
           const { data } = await axiosClient.get<ReturnActionType>(
-            `/api/user/profile/${credentials.userId}`,
+            `/api/user/profile/${credentials.userId}`
           );
           const u = data?.user;
           if (!u) return null;
           return {
-            id: u._id,
+            id:    u._id,
             email: u.email,
-            name: u.fullName,
+            name:  u.fullName,
             phone: u.phone,
-            role: u.role,
+            role:  u.role,
             image: u.phone1,
           } as User & { phone?: string; role?: string };
         } catch {
@@ -116,12 +85,12 @@ export const authOptions: NextAuthOptions = {
     }),
 
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientId:     process.env.GOOGLE_CLIENT_ID     || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
       authorization: {
         params: {
-          prompt: "select_account",
-          access_type: "offline",
+          prompt:        "select_account",
+          access_type:   "offline",
           response_type: "code",
         },
       },
@@ -130,17 +99,18 @@ export const authOptions: NextAuthOptions = {
 
   pages: {
     signIn: "/sign-in",
-    error: "/sign-in",
+    error:  "/sign-in",
   },
 
   callbacks: {
     // ─────────────────────────────────────────────────────────────
     async jwt({ token, user, account }) {
+
       // 1. Credentials provider — to'g'ridan-to'g'ri userId o'rnatamiz
       if (account?.provider === "credentials" && user) {
         token.userId = user.id;
-        token.phone = ((user as Record<string, unknown>).phone as string) ?? "";
-        token.role = ((user as Record<string, unknown>).role as string) ?? "";
+        token.phone  = (user as any).phone ?? "";
+        token.role   = (user as any).role  ?? "";
         delete token.pendingOAuth;
         return token;
       }
@@ -148,7 +118,7 @@ export const authOptions: NextAuthOptions = {
       // 2. Google provider — oauth-login orqali userId topamiz
       if (account?.provider === "google" && user?.email) {
         const fullName = user.name || user.email.split("@")[0];
-        const userId = await oauthLoginOrRegister(user.email, fullName);
+        const userId   = await oauthLoginOrRegister(user.email, fullName);
 
         if (userId) {
           // Muvaffaqiyat — to'liq session
@@ -163,10 +133,9 @@ export const authOptions: NextAuthOptions = {
 
       // 3. Token refresh — pendingOAuth holatida qayta urinib ko'ramiz
       if (!token.userId && token.pendingOAuth?.email) {
-        const email = token.pendingOAuth.email as string;
-        const fullName =
-          (token.pendingOAuth.fullName as string) || email.split("@")[0];
-        const userId = await oauthLoginOrRegister(email, fullName);
+        const email    = token.pendingOAuth.email  as string;
+        const fullName = token.pendingOAuth.fullName as string || email.split("@")[0];
+        const userId   = await oauthLoginOrRegister(email, fullName);
         if (userId) {
           token.userId = userId;
           delete token.pendingOAuth;
@@ -178,7 +147,7 @@ export const authOptions: NextAuthOptions = {
 
     // ─────────────────────────────────────────────────────────────
     async session({ session, token }) {
-      const userId = token?.userId as string | undefined;
+      const userId       = token?.userId      as string | undefined;
       const pendingOAuth = token?.pendingOAuth as
         | { email?: string | null; fullName?: string | null }
         | undefined;
@@ -186,15 +155,15 @@ export const authOptions: NextAuthOptions = {
       if (userId) {
         try {
           const { data } = await axiosClient.get<ReturnActionType>(
-            `/api/user/profile/${userId}`,
+            `/api/user/profile/${userId}`
           );
           const u = data?.user;
           if (u) {
             session.currentUser = { ...u };
             session.user = {
               ...(session.user ?? {}),
-              id: u._id,
-              name: u.fullName,
+              id:    u._id,
+              name:  u.fullName,
               email: u.email,
               phone: u.phone,
               image: u.phone1,
