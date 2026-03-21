@@ -33,6 +33,7 @@ const MobileBottomBar: FC = () => {
   ];
 
   const isActive = (href: string) => {
+    if (!pathname) return false;
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
   };

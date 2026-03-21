@@ -308,7 +308,7 @@ const SignUpPage = () => {
             )}
           </form>
         </Form>
-        <GoogleButton variant="signup" route={"/sign-up"} />
+        <GoogleButton variant="signup" />
         {/* OTP Verification Section */}
         {isVerifying && (
           <div className="mt-6 pt-6 border-t border-gray-200">
