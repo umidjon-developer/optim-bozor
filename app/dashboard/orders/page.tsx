@@ -9,6 +9,18 @@ import Link from "next/link";
 
 interface Props { searchParams: SearchParams }
 
+interface Order {
+  _id: string;
+  status: string;
+  product: { image: string; title: string; price: number };
+  quantity: number;
+  createdAt: string;
+  latitude?: number;
+  longitude?: number;
+  isPaid: boolean;
+  user: { fullName: string; email: string };
+}
+
 function formatPrice(price: number) {
   return new Intl.NumberFormat("uz-UZ", { style: "currency", currency: "UZS", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(price);
 }
@@ -35,8 +47,8 @@ const OrdersPage: FC<Props> = async (props) => {
     </div>
   );
 
-  const orders = (res as any)?.data?.orders || [];
-  const isNext = (res as any)?.data?.isNext || false;
+  const orders = (res as { data?: { orders?: Order[]; isNext?: boolean } })?.data?.orders || [];
+  const isNext = (res as { data?: { orders?: Order[]; isNext?: boolean } })?.data?.isNext || false;
 
   return (
     <div className="space-y-6">
@@ -66,7 +78,7 @@ const OrdersPage: FC<Props> = async (props) => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {orders.map((order: any) => {
+          {orders.map((order) => {
             const s = getStatus(order.status);
             return (
               <div key={order._id} className="rounded-2xl bg-card border border-border shadow-premium overflow-hidden hover:shadow-premium-hover transition-all duration-200 hover:-translate-y-0.5 flex flex-col">

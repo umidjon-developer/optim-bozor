@@ -118,9 +118,9 @@ const SignInPage = () => {
       </div>
 
       <p className="text-center text-sm text-muted-foreground mt-5">
-        Hisobingiz yo'qmi?{" "}
+        Hisobingiz yo&apos;qmi?{" "}
         <Link href="/sign-up" className="font-semibold text-primary hover:text-primary/80 transition-colors">
-          Ro'yxatdan o'ting
+          Ro&apos;yxatdan o&apos;ting
         </Link>
       </p>
     </motion.div>

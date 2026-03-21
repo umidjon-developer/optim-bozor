@@ -404,7 +404,7 @@ const CartPage: React.FC<CartProps> = ({ products: initialProducts }) => {
                   <button className="w-full flex items-center justify-center gap-2 h-10 rounded-xl border border-border text-sm font-medium text-foreground hover:bg-secondary transition-colors mb-3">
                     <Map className="w-4 h-4" style={{ color: "#6366f1" }} />
                     {selectedLocation
-                      ? "Manzilni o'zgartirish"
+                      ? "Manzilni o&apos;zgartirish"
                       : "Manzilni tanlang"}
                   </button>
                 </AlertDialogTrigger>

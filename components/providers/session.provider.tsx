@@ -38,7 +38,7 @@ function AutoOAuthLogin() {
         }
         // Mark as checked regardless of result to prevent repeated requests
         setLastCheckedEmail(pending.email);
-      } catch (error) {
+      } catch {
         // Silently fail - user can still log in manually
         // Mark as checked to prevent repeated failed requests
         setLastCheckedEmail(pending.email);
