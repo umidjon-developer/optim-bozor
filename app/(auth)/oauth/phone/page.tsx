@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { phoneSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Phone, ArrowRight, ShieldCheck } from "lucide-react";
@@ -47,10 +41,7 @@ export default function OAuthPhonePage() {
       const fullName = session?.pendingOAuth?.fullName as string | undefined;
 
       if (!email) {
-        toast({
-          description: "Google ma'lumoti topilmadi",
-          variant: "destructive",
-        });
+        toast({ description: "Google ma'lumoti topilmadi", variant: "destructive" });
         return;
       }
 
@@ -62,10 +53,7 @@ export default function OAuthPhonePage() {
       });
 
       if (res?.serverError || res?.validationErrors || !res?.data) {
-        toast({
-          description: "Xatolik yuz berdi. Qayta urinib ko'ring.",
-          variant: "destructive",
-        });
+        toast({ description: "Xatolik yuz berdi. Qayta urinib ko'ring.", variant: "destructive" });
         return;
       }
       if (res.data.failure) {
@@ -100,19 +88,13 @@ export default function OAuthPhonePage() {
       <div className="text-center mb-8">
         <div
           className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
-          style={{
-            background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-            boxShadow: "0 8px 24px rgba(99,102,241,0.3)",
-          }}
+          style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)", boxShadow: "0 8px 24px rgba(99,102,241,0.3)" }}
         >
           <Phone className="w-6 h-6 text-white" />
         </div>
-        <h1 className="text-2xl font-bold text-foreground mb-2">
-          Telefon raqamingiz
-        </h1>
+        <h1 className="text-2xl font-bold text-foreground mb-2">Telefon raqamingiz</h1>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Google orqali kirish tugallandi. Hisobni yakunlash uchun telefon
-          raqamingizni kiriting.
+          Google orqali kirish tugallandi. Hisobni yakunlash uchun telefon raqamingizni kiriting.
         </p>
       </div>
 
@@ -120,31 +102,16 @@ export default function OAuthPhonePage() {
       {session?.pendingOAuth?.email && (
         <div
           className="flex items-center gap-3 p-3 rounded-xl mb-5"
-          style={{
-            background: "rgba(99,102,241,0.06)",
-            border: "1px solid rgba(99,102,241,0.15)",
-          }}
+          style={{ background: "rgba(99,102,241,0.06)", border: "1px solid rgba(99,102,241,0.15)" }}
         >
-          <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-            style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
-          >
-            {((session.pendingOAuth.fullName as string) || "U")
-              .charAt(0)
-              .toUpperCase()}
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold text-white flex-shrink-0" style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}>
+            {(session.pendingOAuth.fullName as string || "U").charAt(0).toUpperCase()}
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-foreground truncate">
-              {session.pendingOAuth.fullName as string}
-            </p>
-            <p className="text-xs text-muted-foreground truncate">
-              {session.pendingOAuth.email as string}
-            </p>
+            <p className="text-sm font-semibold text-foreground truncate">{session.pendingOAuth.fullName as string}</p>
+            <p className="text-xs text-muted-foreground truncate">{session.pendingOAuth.email as string}</p>
           </div>
-          <ShieldCheck
-            className="w-4 h-4 flex-shrink-0"
-            style={{ color: "#22c55e" }}
-          />
+          <ShieldCheck className="w-4 h-4 flex-shrink-0" style={{ color: "#22c55e" }} />
         </div>
       )}
 
@@ -181,37 +148,20 @@ export default function OAuthPhonePage() {
               type="submit"
               disabled={isLoading}
               className="w-full h-11 rounded-xl font-semibold text-sm text-white flex items-center justify-center gap-2 transition-all hover:opacity-90 hover:shadow-lg disabled:opacity-60"
-              style={{
-                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                boxShadow: "0 4px 16px rgba(99,102,241,0.3)",
-              }}
+              style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)", boxShadow: "0 4px 16px rgba(99,102,241,0.3)" }}
             >
               {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Tasdiqlanmoqda...
-                </>
+                <><Loader2 className="w-4 h-4 animate-spin" />Tasdiqlanmoqda...</>
               ) : (
-                <>
-                  Tasdiqlash
-                  <ArrowRight className="w-4 h-4" />
-                </>
+                <>Tasdiqlash<ArrowRight className="w-4 h-4" /></>
               )}
             </button>
           </form>
         </Form>
 
-        <div
-          className="flex items-center gap-2 mt-4 p-3 rounded-xl"
-          style={{
-            background: "rgba(34,197,94,0.06)",
-            border: "1px solid rgba(34,197,94,0.15)",
-          }}
-        >
+        <div className="flex items-center gap-2 mt-4 p-3 rounded-xl" style={{ background: "rgba(34,197,94,0.06)", border: "1px solid rgba(34,197,94,0.15)" }}>
           <ShieldCheck className="w-4 h-4 flex-shrink-0 text-emerald-500" />
-          <p className="text-xs text-muted-foreground">
-            Telefon raqamingiz xavfsizlik uchun talab qilinadi
-          </p>
+          <p className="text-xs text-muted-foreground">Telefon raqamingiz xavfsizlik uchun talab qilinadi</p>
         </div>
       </div>
     </motion.div>

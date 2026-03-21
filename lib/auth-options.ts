@@ -139,8 +139,8 @@ export const authOptions: NextAuthOptions = {
       // 1. Credentials provider — to'g'ridan-to'g'ri userId o'rnatamiz
       if (account?.provider === "credentials" && user) {
         token.userId = user.id;
-        token.phone = (user as any).phone ?? "";
-        token.role = (user as any).role ?? "";
+        token.phone = ((user as Record<string, unknown>).phone as string) ?? "";
+        token.role = ((user as Record<string, unknown>).role as string) ?? "";
         delete token.pendingOAuth;
         return token;
       }

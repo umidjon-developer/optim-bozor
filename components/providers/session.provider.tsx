@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
-import { login } from "@/actions/auth.action";
 import { SessionProvider } from "next-auth/react";
 
 function AutoOAuthLogin() {
   const { data: session, update } = useSession();
+<<<<<<< HEAD
   const [isProcessing, setIsProcessing] = useState(false);
   const [lastCheckedEmail, setLastCheckedEmail] = useState<string | null>(null);
 
@@ -45,6 +45,27 @@ function AutoOAuthLogin() {
       }
     })();
   }, [session?.pendingOAuth?.email, session?.currentUser?._id, update]); // Removed isProcessing from dependencies
+=======
+
+  useEffect(() => {
+    (async () => {
+      const pending = session?.pendingOAuth; // agar session tipingiz kengaytirilgan bo‘lsa
+      const hasUser = session?.currentUser?._id;
+      if (!pending?.email || hasUser) return;
+
+      const res = await login({
+        email: pending.email,
+        password: "oauth_dummy_password",
+      });
+
+      const id = res?.data?.user?._id;
+      if (id) {
+        await signIn("credentials", { userId: id, redirect: false });
+        await update(); // sessiyani yangilash
+      }
+    })();
+  }, [session, update]);
+>>>>>>> 32a527e59bb40d0b6ca5d32175de1428908e676a
 
   return null;
 }
