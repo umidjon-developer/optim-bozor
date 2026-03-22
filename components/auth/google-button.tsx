@@ -14,7 +14,7 @@ export default function GoogleButton({
   const handleClick = () => {
     // Har doim / ga qaytamiz — auth-options.ts ichida pendingOAuth bo'lsa
     // middleware uni /oauth/phone ga yo'naltiradi
-    signIn("google", { callbackUrl: "/" });
+    signIn("google", { callbackUrl: "/auth" });
   };
 
   return (
