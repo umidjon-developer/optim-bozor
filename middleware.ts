@@ -1,19 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
-import { rateLimiter } from "./lib/rate-limiter";
+
+// Middleware'da getToken ISHLATMAYMIZ — bu Vercel'da state cookie'ni buzadi
+// Faqat oddiy rate limiting qoladi
 
 const getClientIp = (req: NextRequest): string => {
   const forwarded = req.headers.get("x-forwarded-for");
   return forwarded?.split(",")[0]?.trim() || "unknown";
 };
 
-// Himoya talab qiladigan sahifalar
-const PROTECTED_PATHS = ["/cart", "/favorites", "/dashboard"];
-// Faqat pendingOAuth uchun ruxsat berilgan sahifalar
-const OAUTH_ALLOWED = ["/oauth/phone", "/api/auth", "/sign-in", "/sign-out"];
+// Simple in-memory rate limiter
+const rateMap = new Map<string, { count: number; resetAt: number }>();
 
-export async function middleware(req: NextRequest) {
+function rateLimiter(ip: string): boolean {
+  const now = Date.now();
+  const windowMs = 60_000; // 1 daqiqa
+  const max = 100;
+
+  const entry = rateMap.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateMap.set(ip, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+  entry.count++;
+  return entry.count <= max;
+}
+
+export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  // NextAuth va static fayllarni o'tkazib yuborish
+  if (
+    pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/_next") ||
+    pathname.includes(".")
+  ) {
+    return NextResponse.next();
+  }
 
   // Rate limiting
   const ip = getClientIp(req);
@@ -24,45 +46,11 @@ export async function middleware(req: NextRequest) {
     );
   }
 
-  // Static / API route larni o'tkazib yuborish
-  if (
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/api/auth") ||
-    pathname.includes(".")
-  ) {
-    return NextResponse.next();
-  }
-
-  // Token ni tekshirish
-  const token = await getToken({
-    req,
-    secret: process.env.NEXT_AUTH_SECRET || process.env.NEXTAUTH_SECRET,
-  });
-
-  // 1. pendingOAuth holati — user Google orqali kirgan lekin backend ro'yxati yo'q
-  //    Faqat /oauth/phone sahifasiga ruxsat, qolganlar redirect
-  const isPendingOAuth = token?.pendingOAuth && !token?.userId;
-  if (isPendingOAuth) {
-    const isAllowed = OAUTH_ALLOWED.some((p) => pathname.startsWith(p));
-    if (!isAllowed && pathname !== "/oauth/phone") {
-      const url = req.nextUrl.clone();
-      url.pathname = "/oauth/phone";
-      return NextResponse.redirect(url);
-    }
-  }
-
-  // 2. Himoyalangan sahifalar — login bo'lmasa /sign-in ga
-  const isProtected = PROTECTED_PATHS.some((p) => pathname.startsWith(p));
-  if (isProtected && !token) {
-    const url = req.nextUrl.clone();
-    url.pathname = "/sign-in";
-    url.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(url);
-  }
-
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico).*)",
+  ],
 };
